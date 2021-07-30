@@ -42,7 +42,11 @@ class mySprite(pygame.sprite.Sprite):
 
     # Shooter will move according to U/D/L/R
     def moveKeyboardUDLR(self, pressed):
-        self.rect.x = mouseX
+        if pressed[pygame.K_LEFT]:
+            self.rect.x -= self.speed
+        if pressed[pygame.K_RIGHT]:
+             self.rect.x += self.speed
+        self.rect = fixOutOfBounds(self.rect)
 
 class Bullet(pygame.sprite.Sprite):
     def __init__(self):
@@ -135,7 +139,7 @@ shooter_list.add(shooter)
 # ------------------------------------------------
 start = -2
 score = 0
-shots = 85
+shots = 1000
 highscore = 0
 lives = 3
 killed = 0
@@ -167,18 +171,18 @@ for g in gList:
 # ------------------------------------------------
 # Used to manage how fast the screen updates
 clock = pygame.time.Clock()
-pygame.key.set_repeat(50,300)
+pygame.key.set_repeat(50, 300)
 
 
 while True:
     clock.tick(30)
     for event in pygame.event.get():
-        (mouseX, mouseY) = pygame.mouse.get_pos()
         # If the event is quit, exit.
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
-        elif event.type == MOUSEBUTTONDOWN:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
                 bullet = Bullet()
                 bullet.rect.x = shooter.rect.x
                 bullet.rect.y = shooter.rect.y
@@ -253,9 +257,9 @@ while True:
         myfont = pygame.font.SysFont('Comic Sans MS', 30)
         textsurface6 = myfont.render("Game: Space Invaders", False, TEAL)
         windowSurface.blit(textsurface6, (hSize // 3, vSize // 12))
-        textsurface3 = myfont.render("RULES: You have 3 lives and 85 shots, destroy all enemy ships.", False, RED)
-        windowSurface.blit(textsurface3, (hSize // 15, vSize // 4))
-        textsurface5 = myfont.render("The more ships you shoot, the more points you earn.", False, RED)
+        textsurface3 = myfont.render("RULES: You have 85 shots, destroy all of the enemy ships.", False, RED)
+        windowSurface.blit(textsurface3, (hSize // 7, vSize // 4))
+        textsurface5 = myfont.render("The more ships you shot, the more points you earn.", False, RED)
         windowSurface.blit(textsurface5, (hSize // 6, vSize // 3))
         textsurface7 = myfont.render("Controls: Use Left and Right arrows to move your ship.", False, BLUE)
         windowSurface.blit(textsurface7, (hSize // 6, vSize // 2.2))
@@ -263,10 +267,10 @@ while True:
         windowSurface.blit(textsurface8, (hSize // 5.5, vSize // 1.8))
         textsurface8 = myfont.render("THE FATE OF THE UNIVERSE IS IN YOUR HANDS!", False, WHITE)
         windowSurface.blit(textsurface8, (hSize // 6, vSize // 1.4))
-        textsurface4 = myfont.render("Press Mouse to play!!", False, RED)
+        textsurface4 = myfont.render("Press Backspace to play!!", False, RED)
         windowSurface.blit(textsurface4, (hSize // 3, vSize // 1.2))
         pygame.display.update()
-        if event.type == MOUSEBUTTONDOWN:
+        if pressed[pygame.K_BACKSPACE]:
             start = 0
 
     if shots == 0 or lives == 0:
@@ -283,11 +287,11 @@ while True:
         windowSurface.blit(textsurface5, (hSize // 2.7, vSize // 2))
         windowSurface.blit(textsurface6, (hSize // 1.85, vSize // 2.3))
         windowSurface.blit(textsurface7, (hSize // 1.85, vSize // 2))
-        textsurface8 = myfont.render("Press Mouse to play!!", False, WHITE)
+        textsurface8 = myfont.render("Press Backspace to play!!", False, WHITE)
         windowSurface.blit(textsurface8, (hSize // 3, vSize // 1.45))
         if score > highscore:
             highscore = score
-        if event.type == MOUSEBUTTONDOWN:
+        if pressed[pygame.K_BACKSPACE]:
             start = 0
             shots = 85
             score = 0
@@ -312,11 +316,11 @@ while True:
         windowSurface.blit(textsurface5, (hSize // 2.7, vSize // 2))
         windowSurface.blit(textsurface6, (hSize // 1.85, vSize // 2.3))
         windowSurface.blit(textsurface7, (hSize // 1.85, vSize // 2))
-        textsurface8 = myfont.render("Press Mouse to play!!", False, WHITE)
+        textsurface8 = myfont.render("Press Backspace to play!!", False, WHITE)
         windowSurface.blit(textsurface8, (hSize // 3, vSize // 1.45))
         if score > highscore:
             highscore = score
-        if event.type == MOUSEBUTTONDOWN:
+        if pressed[pygame.K_BACKSPACE]:
             start = 0
             shots = 85
             score = 0
